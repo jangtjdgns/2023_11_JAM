@@ -11,6 +11,8 @@ CREATE TABLE article(
     `body` TEXT NOT NULL
 );
 
+SELECT * FROM article;
+
 // 테이블 초기화
 TRUNCATE article; # article 테이블 초기화 -> increment일때 id도 초기화됨
 
@@ -21,4 +23,9 @@ updateDate = NOW(),
 title = '제목4',
 `body` = '내용4';
 
-SELECT * FROM article;
+// 업데이트
+UPDATE article
+SET 
+updateDate = NOW(),
+title = '1수정',
+`body` = '1수정'
