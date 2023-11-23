@@ -2,6 +2,7 @@ DROP DATABASE IF EXISTS JAM;
 CREATE DATABASE JAM;
 USE JAM;
 
+// 테이블 생성
 CREATE TABLE article(
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
@@ -10,4 +11,14 @@ CREATE TABLE article(
     `body` TEXT NOT NULL
 );
 
+// 테이블 초기화
 TRUNCATE article; # article 테이블 초기화 -> increment일때 id도 초기화됨
+
+// 추가
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+title = '제목4',
+`body` = '내용4';
+
+SELECT * FROM article;
