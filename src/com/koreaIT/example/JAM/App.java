@@ -18,8 +18,6 @@ public class App {
 	public void run() {
 		Scanner sc = new Scanner(System.in);
 		
-//		int lastArticleId = 0;
-		
 		System.out.println("== 프로그램 시작 ==");
 		
 		Connection conn = null;
@@ -43,7 +41,6 @@ public class App {
 						
 						System.out.println("== 게시물 작성 ==");
 						
-//						lastArticleId++;
 						System.out.printf("제목 : ");
 						String title = sc.nextLine().trim();
 						System.out.printf("내용 : ");
@@ -74,61 +71,56 @@ public class App {
 							articles.add(new Article(articleMap));
 						}
 						
-//						try {
-//							String sql = "SELECT * FROM article";
-//							sql += " ORDER BY id DESC;";
-//							
-//							pstmt = conn.prepareStatement(sql);
-//							rs = pstmt.executeQuery();
-//							
-//							while(rs.next()) {
-//								int id = rs.getInt("id");
-//								String regDate = rs.getString("regDate");
-//								String updateDate = rs.getString("updateDate");
-//								String title = rs.getString("title");
-//								String body = rs.getString("body");
-//								
-//								Article article = new Article(id, regDate, updateDate, title, body);
-//								articles.add(article);
-//							}
-//							
-//						} catch (SQLException e) {
-//							System.out.println("에러: " + e);
-//						} 
-						
 						if (articles.size() == 0) {
 							System.out.println("존재하는 게시물이 없습니다");
 							continue;
 						}
 						
-						System.out.println("번호	|	제목");
+						System.out.println("번호	|	제목	|	날짜");
 						for (Article article : articles) {
-							System.out.printf("%d	|	%s\n", article.id, article.title);
+							System.out.printf("%d	|	%s	|	%s\n", article.id, article.title, article.regDate);
 						}
 						
 					} else if (cmd.startsWith("article modify ")) {
-						System.out.println("== 게시물 수정 ==");
-						
 						int id = Integer.parseInt(cmd.split(" ")[2]);
 						
+						SecSql sql = SecSql.from("SELECT count(*) FROM article");
+						sql.append("WHERE id = ?", id);
+
+						int articleCnt = DBUtil.selectRowIntValue(conn, sql);
+						
+						if(articleCnt == 0) {
+							System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+							continue;
+						}
+						
+						System.out.println("== 게시물 수정 ==");
 						System.out.printf("수정할 제목 : ");
 						String title = sc.nextLine().trim();
 						System.out.printf("수정할 내용 : ");
 						String body = sc.nextLine().trim();
 						
-						try {
-							String sql = "UPDATE article";
-							sql += " SET updateDate = NOW()";
-							sql += ", title = '" + title + "'";
-							sql += ", `body` = '" + body + "'";
-							sql += "WHERE id = " + id + ";";
-							
-							pstmt = conn.prepareStatement(sql);
-							pstmt.executeUpdate();
-							
-						} catch (SQLException e) {
-							System.out.println("에러: " + e);
-						}
+						sql = SecSql.from("UPDATE article");
+						sql.append("SET updateDate = NOW()");
+						sql.append(", title = ?", title);
+						sql.append(", `body` = ?", body);
+						sql.append("WHERE id = ?", id);
+						
+						DBUtil.update(conn, sql);
+						
+//						try {
+//							String sql = "UPDATE article";
+//							sql += " SET updateDate = NOW()";
+//							sql += ", title = '" + title + "'";
+//							sql += ", `body` = '" + body + "'";
+//							sql += "WHERE id = " + id + ";";
+//							
+//							pstmt = conn.prepareStatement(sql);
+//							pstmt.executeUpdate();
+//							
+//						} catch (SQLException e) {
+//							System.out.println("에러: " + e);
+//						}
 						
 						System.out.printf("%d번 게시물이 수정되었습니다\n", id);
 						
