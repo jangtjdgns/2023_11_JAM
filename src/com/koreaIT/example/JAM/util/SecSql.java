@@ -16,7 +16,7 @@ public class SecSql {
 		return "sql=" + getFormat() + ", data=" + datas;
 	}
 
-	public void SecSQL() {
+	public SecSql() {
 		sqlBuilder = new StringBuilder();
 		datas = new ArrayList<>();
 	}
