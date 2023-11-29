@@ -32,7 +32,7 @@ public class ArticleController {
 	public void showList() {
 		System.out.println("== 게시물 목록 ==");
 		
-		List<Article> articles = articleService.getArticles();
+		List<Article> articles = articleService.showList();
 		
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시물이 없습니다");

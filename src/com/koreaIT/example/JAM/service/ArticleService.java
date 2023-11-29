@@ -18,6 +18,18 @@ public class ArticleService {
 	public int doWrite(String title, String body) {
 		return articleDao.doWrite(title, body);
 	}
+	
+	public List<Article> showList() {
+		List<Map<String, Object>> articleListMap = articleDao.showList();
+
+		List<Article> articles = new ArrayList<>();
+
+		for (Map<String, Object> articleMap : articleListMap) {
+			articles.add(new Article(articleMap));
+		}
+
+		return articles;
+	}
 
 	public int getNumInCmd(String cmd) {
 		return Integer.parseInt(cmd.split(" ")[2]);
@@ -46,17 +58,5 @@ public class ArticleService {
 		}
 
 		return new Article(articleMap);
-	}
-
-	public List<Article> getArticles() {
-		List<Map<String, Object>> articleListMap = articleDao.showList();
-
-		List<Article> articles = new ArrayList<>();
-
-		for (Map<String, Object> articleMap : articleListMap) {
-			articles.add(new Article(articleMap));
-		}
-
-		return articles;
 	}
 }
