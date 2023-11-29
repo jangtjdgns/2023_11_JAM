@@ -35,6 +35,7 @@ title = '1수정',
 CREATE TABLE `member`(
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
     loginId VARCHAR(50) NOT NULL,
     loginPw VARCHAR(100) NOT NULL,
     `name` VARCHAR(20) NOT NULL                                                                                                                                               

@@ -22,7 +22,7 @@ public class App {
 			conn = DriverManager.getConnection(url, "root", "");
 			
 			ArticleController articleController = new ArticleController(sc, conn);
-			MemberController memberContoller = new MemberController(sc, conn);
+			MemberController memberController = new MemberController(sc, conn);
 			
 			while (true) {
 				System.out.printf("명령어) ");
@@ -32,8 +32,13 @@ public class App {
 					break;
 				}
 
+				// 회원가입
+				if (cmd.equals("member join")) {
+					memberController.doJoin();
+				}
+				
 				// 작성
-				if (cmd.equals("article write")) {
+				else if (cmd.equals("article write")) {
 					articleController.doWrite();
 				}
 
@@ -55,11 +60,6 @@ public class App {
 				// 삭제
 				else if (cmd.startsWith("article delete ")) {
 					articleController.doDelete(cmd);
-				}
-
-				// 회원가입
-				else if (cmd.equals("member join")) {
-					memberContoller.doJoin();
 				}
 
 				else {

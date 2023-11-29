@@ -1,9 +1,7 @@
 package com.koreaIT.example.JAM.controller;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import com.koreaIT.example.JAM.dto.Article;
@@ -34,14 +32,8 @@ public class ArticleController {
 	public void showList() {
 		System.out.println("== 게시물 목록 ==");
 		
-		List<Article> articles = new ArrayList<>();
+		List<Article> articles = articleService.getArticles();
 		
-		List<Map<String, Object>> articleListMap = articleService.showList();
-
-		for (Map<String, Object> articleMap : articleListMap) {
-			articles.add(new Article(articleMap));
-		}
-
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시물이 없습니다");
 			return;
@@ -54,7 +46,7 @@ public class ArticleController {
 	}
 
 	public void doModify(String cmd) {
-		int id = Integer.parseInt(cmd.split(" ")[2]);
+		int id = articleService.getNumInCmd(cmd);
 
 		int articleCnt = articleService.getArticleCnt(id);
 		
@@ -75,16 +67,14 @@ public class ArticleController {
 	}
 
 	public void showDetail(String cmd) {
-		int id = Integer.parseInt(cmd.split(" ")[2]);
+		int id = articleService.getNumInCmd(cmd);
 		
-		Map<String, Object> articleMap = articleService.getArticleMap(id);
+		Article article = articleService.showDetail(id);
 		
-		if (articleMap.isEmpty()) {
+		if (article == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 			return;
 		}
-
-		Article article = new Article(articleMap);
 
 		System.out.printf("== %d번 게시물 상세보기 ==\n", id);
 		System.out.println("번  호: " + article.id);
@@ -95,8 +85,8 @@ public class ArticleController {
 	}
 
 	public void doDelete(String cmd) {
-		int id = Integer.parseInt(cmd.split(" ")[2]);
-
+		int id = articleService.getNumInCmd(cmd);
+		
 		int articleCnt = articleService.getArticleCnt(id);
 
 		if (articleCnt == 0) {

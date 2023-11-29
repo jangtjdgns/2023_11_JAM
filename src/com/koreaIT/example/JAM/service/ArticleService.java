@@ -1,15 +1,17 @@
 package com.koreaIT.example.JAM.service;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.koreaIT.example.JAM.dao.ArticleDao;
+import com.koreaIT.example.JAM.dto.Article;
 
 public class ArticleService {
 	private ArticleDao articleDao;
-	
-	public ArticleService(Connection conn){
+
+	public ArticleService(Connection conn) {
 		this.articleDao = new ArticleDao(conn);
 	}
 
@@ -17,8 +19,8 @@ public class ArticleService {
 		return articleDao.doWrite(title, body);
 	}
 
-	public List<Map<String, Object>> showList() {
-		return articleDao.showList();
+	public int getNumInCmd(String cmd) {
+		return Integer.parseInt(cmd.split(" ")[2]);
 	}
 
 	public int getArticleCnt(int id) {
@@ -26,7 +28,7 @@ public class ArticleService {
 	}
 
 	public void doModify(int id, String title, String body) {
-		articleDao.doModify(id, title, body);		
+		articleDao.doModify(id, title, body);
 	}
 
 	public Map<String, Object> getArticleMap(int id) {
@@ -34,6 +36,27 @@ public class ArticleService {
 	}
 
 	public void doDelete(int id) {
-		articleDao.doDelete(id);		
+		articleDao.doDelete(id);
+	}
+
+	public Article showDetail(int id) {
+		Map<String, Object> articleMap = articleDao.getArticleMap(id);
+		if (articleMap.isEmpty()) {
+			return null;
+		}
+
+		return new Article(articleMap);
+	}
+
+	public List<Article> getArticles() {
+		List<Map<String, Object>> articleListMap = articleDao.showList();
+
+		List<Article> articles = new ArrayList<>();
+
+		for (Map<String, Object> articleMap : articleListMap) {
+			articles.add(new Article(articleMap));
+		}
+
+		return articles;
 	}
 }
