@@ -15,8 +15,8 @@ public class ArticleService {
 		this.articleDao = new ArticleDao(conn);
 	}
 
-	public int doWrite(String title, String body) {
-		return articleDao.doWrite(title, body);
+	public int doWrite(String title, String body, int memberId) {
+		return articleDao.doWrite(title, body, memberId);
 	}
 	
 	public List<Article> showList() {
@@ -58,5 +58,9 @@ public class ArticleService {
 		}
 
 		return new Article(articleMap);
+	}
+
+	public String getName(int articleid, int memberId) {
+		return articleDao.getName(articleid, memberId);
 	}
 }

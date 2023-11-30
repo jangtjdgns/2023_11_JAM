@@ -47,6 +47,11 @@ public class App {
 					memberController.doLogout();
 				}
 					
+				// 회원 프로필
+				else if(cmd.equals("member profile")) {
+					memberController.showProfile();
+				}
+				
 				// 작성
 				else if (cmd.equals("article write")) {
 					articleController.doWrite();

@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.koreaIT.example.JAM.dto.Article;
 import com.koreaIT.example.JAM.service.ArticleService;
+import com.koreaIT.example.JAM.session.Session;
 
 public class ArticleController {
 	private Scanner sc;
@@ -17,6 +18,11 @@ public class ArticleController {
 	}
 
 	public void doWrite() {
+		if(!Session.isLogined()) {
+			System.out.println("로그인 후 이용가능합니다.");
+			return;
+		}
+		
 		System.out.println("== 게시물 작성 ==");
 
 		System.out.printf("제목 : ");
@@ -24,7 +30,8 @@ public class ArticleController {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		int id = articleService.doWrite(title, body);
+		int memberId = Session.getMemberId();
+		int id = articleService.doWrite(title, body, memberId);
 
 		System.out.printf("%d번 게시물이 생성되었습니다\n", id);
 	}
@@ -39,13 +46,20 @@ public class ArticleController {
 			return;
 		}
 
-		System.out.println("번호	|	제목	|	날짜");
+		String name = null;
+		System.out.println("번호	|	제목	|	작성일	|	작성자");
 		for (Article article : articles) {
-			System.out.printf("%d	|	%s	|	%s\n", article.id, article.title, article.regDate);
+			name = articleService.getName(article.id, article.memberId);
+			System.out.printf("%d	|	%s	|	%s\n", article.id, article.title, article.regDate, name);
 		}
 	}
 
 	public void doModify(String cmd) {
+		if(!Session.isLogined()) {
+			System.out.println("로그인 후 이용가능합니다.");
+			return;
+		}
+		
 		int id = articleService.getNumInCmd(cmd);
 
 		int articleCnt = articleService.getArticleCnt(id);
@@ -85,6 +99,11 @@ public class ArticleController {
 	}
 
 	public void doDelete(String cmd) {
+		if(!Session.isLogined()) {
+			System.out.println("로그인 후 이용가능합니다.");
+			return;
+		}
+		
 		int id = articleService.getNumInCmd(cmd);
 		
 		int articleCnt = articleService.getArticleCnt(id);

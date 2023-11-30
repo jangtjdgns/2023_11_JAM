@@ -14,12 +14,13 @@ public class ArticleDao {
 		this.conn = conn;
 	}
 
-	public int doWrite(String title, String body) {
+	public int doWrite(String title, String body, int memberId) {
 		SecSql sql = SecSql.from("INSERT INTO article");
 		sql.append("SET regDate = NOW()");
 		sql.append(", updateDate = NOW()");
 		sql.append(", title = ?", title);
 		sql.append(", `body` = ?", body);
+		sql.append(", memberId = ?", memberId);
 
 		return DBUtil.insert(conn, sql);
 	}
@@ -58,6 +59,14 @@ public class ArticleDao {
 		SecSql sql = SecSql.from("DELETE FROM article");
 		sql.append("WHERE id = ?", id);
 		DBUtil.delete(conn, sql);
+	}
+
+	public String getName(int articleId, int memberId) {
+		SecSql sql = SecSql.from("SELECT m.`name` FROM `member` AS m");
+		sql.append("INNER JOIN article AS a");
+		sql.append("ON m.id? = a.memberId", memberId);
+		sql.append("WHERE a.id = ?", articleId);
+		return DBUtil.selectRowStringValue(conn, sql);
 	}
 
 	

@@ -24,4 +24,12 @@ public class Session {
 	public static boolean isLogined() {
 		return loginedMemberId != -1;
 	}
+
+	public static Member getMember() {
+		return loginedMember;
+	}
+
+	public static int getMemberId() {
+		return loginedMemberId;
+	}
 }

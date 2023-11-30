@@ -137,4 +137,20 @@ public class MemberController {
 		Session.logout();
 		System.out.println("로그아웃 되었습니다.");
 	}
+
+	public void showProfile() {
+		if(!Session.isLogined()) {
+			System.out.println("로그인 후 이용가능합니다.");
+			return;
+		}
+		
+		System.out.println("== 마이페이지 ==");
+		
+		Member member = Session.getMember();
+		
+		System.out.println("가입일: " + member.regDate);
+		System.out.println("수정일: " + member.updateDate);
+		System.out.println("로그인 아이디: " + member.loginId);
+		System.out.println("이름: " + member.name);
+	}
 }
