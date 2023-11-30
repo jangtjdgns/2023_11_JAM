@@ -6,6 +6,7 @@ import java.util.Scanner;
 import com.koreaIT.example.JAM.dto.Member;
 import com.koreaIT.example.JAM.service.MemberService;
 import com.koreaIT.example.JAM.session.Session;
+import com.koreaIT.example.JAM.util.Util;
 
 public class MemberController {
 	private Scanner sc;
@@ -17,7 +18,7 @@ public class MemberController {
 	}
 
 	public void doJoin() {
-		if(Session.isLogined()) {
+		if (Session.isLogined()) {
 			System.out.println("로그아웃 후 이용가능합니다.");
 			return;
 		}
@@ -83,7 +84,7 @@ public class MemberController {
 	}
 
 	public void doLogin() {
-		if(Session.isLogined()) {
+		if (Session.isLogined()) {
 			System.out.println("로그아웃 후 이용가능합니다.");
 			return;
 		}
@@ -120,8 +121,8 @@ public class MemberController {
 				System.out.println("비밀번호가 일치하지 않습니다.");
 				continue;
 			}
-			
-			Session.login(member);			
+
+			Session.login(member);
 			break;
 		}
 
@@ -129,27 +130,27 @@ public class MemberController {
 	}
 
 	public void doLogout() {
-		if(!Session.isLogined()) {
+		if (!Session.isLogined()) {
 			System.out.println("로그인 후 이용가능합니다.");
 			return;
 		}
-		
+
 		Session.logout();
 		System.out.println("로그아웃 되었습니다.");
 	}
 
 	public void showProfile() {
-		if(!Session.isLogined()) {
+		if (!Session.isLogined()) {
 			System.out.println("로그인 후 이용가능합니다.");
 			return;
 		}
-		
+
 		System.out.println("== 마이페이지 ==");
-		
+
 		Member member = Session.getMember();
-		
-		System.out.println("가입일: " + member.regDate);
-		System.out.println("수정일: " + member.updateDate);
+
+		System.out.println("가입일: " + Util.datetimeFormat(member.regDate));
+		System.out.println("수정일: " + Util.datetimeFormat(member.updateDate));
 		System.out.println("로그인 아이디: " + member.loginId);
 		System.out.println("이름: " + member.name);
 	}

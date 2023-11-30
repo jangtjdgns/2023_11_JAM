@@ -62,10 +62,11 @@ public class ArticleDao {
 	}
 
 	public String getName(int articleId, int memberId) {
-		SecSql sql = SecSql.from("SELECT m.`name` FROM `member` AS m");
+		SecSql sql = SecSql.from("SELECT m.name FROM `member` AS m");
 		sql.append("INNER JOIN article AS a");
-		sql.append("ON m.id? = a.memberId", memberId);
+		sql.append("ON m.id = a.memberId");
 		sql.append("WHERE a.id = ?", articleId);
+		
 		return DBUtil.selectRowStringValue(conn, sql);
 	}
 

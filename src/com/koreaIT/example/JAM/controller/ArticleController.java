@@ -7,22 +7,23 @@ import java.util.Scanner;
 import com.koreaIT.example.JAM.dto.Article;
 import com.koreaIT.example.JAM.service.ArticleService;
 import com.koreaIT.example.JAM.session.Session;
+import com.koreaIT.example.JAM.util.Util;
 
 public class ArticleController {
 	private Scanner sc;
 	private ArticleService articleService;
-	
+
 	public ArticleController(Scanner sc, Connection conn) {
 		this.sc = sc;
 		this.articleService = new ArticleService(conn);
 	}
 
 	public void doWrite() {
-		if(!Session.isLogined()) {
+		if (!Session.isLogined()) {
 			System.out.println("로그인 후 이용가능합니다.");
 			return;
 		}
-		
+
 		System.out.println("== 게시물 작성 ==");
 
 		System.out.printf("제목 : ");
@@ -38,32 +39,33 @@ public class ArticleController {
 
 	public void showList() {
 		System.out.println("== 게시물 목록 ==");
-		
+
 		List<Article> articles = articleService.showList();
-		
+
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시물이 없습니다");
 			return;
 		}
 
-		String name = null;
-		System.out.println("번호	|	제목	|	작성일	|	작성자");
+		System.out.println("	번호	|	제목	|		작성일		|	작성자");
+		System.out.println("----------------+---------------+-------------------------------+---------------");
 		for (Article article : articles) {
-			name = articleService.getName(article.id, article.memberId);
-			System.out.printf("%d	|	%s	|	%s\n", article.id, article.title, article.regDate, name);
+			String name = articleService.getName(article.id, article.memberId);
+			System.out.printf("	%d	|	%s	|	%s	|	%s\n", article.id, article.title,
+					Util.datetimeFormat(article.regDate), name);
 		}
 	}
 
 	public void doModify(String cmd) {
-		if(!Session.isLogined()) {
+		if (!Session.isLogined()) {
 			System.out.println("로그인 후 이용가능합니다.");
 			return;
 		}
-		
+
 		int id = articleService.getNumInCmd(cmd);
 
 		int articleCnt = articleService.getArticleCnt(id);
-		
+
 		if (articleCnt == 0) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 			return;
@@ -82,9 +84,9 @@ public class ArticleController {
 
 	public void showDetail(String cmd) {
 		int id = articleService.getNumInCmd(cmd);
-		
+
 		Article article = articleService.showDetail(id);
-		
+
 		if (article == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 			return;
@@ -92,20 +94,21 @@ public class ArticleController {
 
 		System.out.printf("== %d번 게시물 상세보기 ==\n", id);
 		System.out.println("번  호: " + article.id);
-		System.out.println("작성일: " + article.regDate);
-		System.out.println("수정일: " + article.updateDate);
+		System.out.println("작성일: " + Util.datetimeFormat(article.regDate));
+		System.out.println("수정일: " + Util.datetimeFormat(article.updateDate));
+		System.out.println("작성자: " + articleService.getName(article.id, article.memberId));
 		System.out.println("제  목: " + article.title);
 		System.out.println("내  용: " + article.body);
 	}
 
 	public void doDelete(String cmd) {
-		if(!Session.isLogined()) {
+		if (!Session.isLogined()) {
 			System.out.println("로그인 후 이용가능합니다.");
 			return;
 		}
-		
+
 		int id = articleService.getNumInCmd(cmd);
-		
+
 		int articleCnt = articleService.getArticleCnt(id);
 
 		if (articleCnt == 0) {
