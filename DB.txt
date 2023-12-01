@@ -8,7 +8,7 @@ CREATE TABLE article(
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     title VARCHAR(100) NOT NULL,
-    `body` TEXT NOT NULL
+    `body` TEXT NOT NULL,
     memberId INT UNSIGNED NOT NULL
 );
 
@@ -22,14 +22,16 @@ INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 title = '제목4',
-`body` = '내용4';
+`body` = '내용4',
+memberId = 1;
 
 // 업데이트
 UPDATE article
 SET 
 updateDate = NOW(),
 title = '1수정',
-`body` = '1수정'
+`body` = '1수정',
+memberId = 1;
 
 
 // member 테이블 생성

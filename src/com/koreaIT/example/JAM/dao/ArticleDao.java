@@ -61,13 +61,21 @@ public class ArticleDao {
 		DBUtil.delete(conn, sql);
 	}
 
-	public String getName(int articleId, int memberId) {
-		SecSql sql = SecSql.from("SELECT m.name FROM `member` AS m");
+	public String getNameByArticleId(int articleId) {
+		SecSql sql = SecSql.from("SELECT m.name AS `writerName` FROM `member` AS m");
 		sql.append("INNER JOIN article AS a");
 		sql.append("ON m.id = a.memberId");
 		sql.append("WHERE a.id = ?", articleId);
 		
 		return DBUtil.selectRowStringValue(conn, sql);
+	}
+
+	public boolean checkAuthority(int id, int memberId) {
+		SecSql sql = SecSql.from("SELECT");
+		sql.append("memberId = ? FROM article", memberId);
+		sql.append("WHERE id = ?", id);
+
+		return DBUtil.selectRowBooleanValue(conn, sql);
 	}
 
 	

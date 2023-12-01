@@ -31,8 +31,7 @@ public class ArticleController {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		int memberId = Session.getMemberId();
-		int id = articleService.doWrite(title, body, memberId);
+		int id = articleService.doWrite(title, body, Session.getMemberId());
 
 		System.out.printf("%d번 게시물이 생성되었습니다\n", id);
 	}
@@ -47,12 +46,11 @@ public class ArticleController {
 			return;
 		}
 
-		System.out.println("	번호	|	제목	|		작성일		|	작성자");
-		System.out.println("----------------+---------------+-------------------------------+---------------");
+		System.out.println("번호	|	제목	|	작성자	|		작성일");
 		for (Article article : articles) {
-			String name = articleService.getName(article.id, article.memberId);
-			System.out.printf("	%d	|	%s	|	%s	|	%s\n", article.id, article.title,
-					Util.datetimeFormat(article.regDate), name);
+			String name = articleService.getNameByArticleId(article.id);
+			System.out.printf("%d	|	%s	|	%s	|	%s\n", article.id, article.title, name,
+					Util.datetimeFormat(article.regDate));
 		}
 	}
 
@@ -68,6 +66,13 @@ public class ArticleController {
 
 		if (articleCnt == 0) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+			return;
+		}
+
+		boolean checkAuthority = articleService.checkAuthority(id, Session.getMemberId());
+
+		if (!checkAuthority) {
+			System.out.printf("%d번 게시물에 대한 권한이 없습니다.\n", id);
 			return;
 		}
 
@@ -96,7 +101,7 @@ public class ArticleController {
 		System.out.println("번  호: " + article.id);
 		System.out.println("작성일: " + Util.datetimeFormat(article.regDate));
 		System.out.println("수정일: " + Util.datetimeFormat(article.updateDate));
-		System.out.println("작성자: " + articleService.getName(article.id, article.memberId));
+		System.out.println("작성자: " + articleService.getNameByArticleId(article.id));
 		System.out.println("제  목: " + article.title);
 		System.out.println("내  용: " + article.body);
 	}
@@ -113,6 +118,13 @@ public class ArticleController {
 
 		if (articleCnt == 0) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+			return;
+		}
+
+		boolean checkAuthority = articleService.checkAuthority(id, Session.getMemberId());
+
+		if (!checkAuthority) {
+			System.out.printf("%d번 게시물에 대한 권한이 없습니다.\n", id);
 			return;
 		}
 

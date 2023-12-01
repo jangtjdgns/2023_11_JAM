@@ -60,7 +60,11 @@ public class ArticleService {
 		return new Article(articleMap);
 	}
 
-	public String getName(int articleid, int memberId) {
-		return articleDao.getName(articleid, memberId);
+	public String getNameByArticleId(int articleid) {
+		return articleDao.getNameByArticleId(articleid);
+	}
+
+	public boolean checkAuthority(int id, int memberId) {
+		return articleDao.checkAuthority(id, memberId);
 	}
 }
