@@ -9,7 +9,7 @@ import com.koreaIT.example.JAM.util.SecSql;
 
 public class ArticleDao {
 	private Connection conn;
-	
+
 	public ArticleDao(Connection conn) {
 		this.conn = conn;
 	}
@@ -28,10 +28,17 @@ public class ArticleDao {
 	public List<Map<String, Object>> showList() {
 		SecSql sql = SecSql.from("SELECT * FROM article");
 		sql.append("ORDER BY id DESC");
-		
+
 		return DBUtil.selectRows(conn, sql);
 	}
 	
+	public List<Map<String, Object>> getAriclesBySearchKeyword(String searchKeyword) {
+		SecSql sql = SecSql.from("SELECT * FROM article");
+		sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
+		sql.append("ORDER BY id DESC");
+		
+		return DBUtil.selectRows(conn, sql);
+	}
 
 	public int getArticleCnt(int id) {
 		SecSql sql = SecSql.from("SELECT count(*) FROM article");
@@ -66,7 +73,7 @@ public class ArticleDao {
 		sql.append("INNER JOIN article AS a");
 		sql.append("ON m.id = a.memberId");
 		sql.append("WHERE a.id = ?", articleId);
-		
+
 		return DBUtil.selectRowStringValue(conn, sql);
 	}
 
@@ -78,5 +85,4 @@ public class ArticleDao {
 		return DBUtil.selectRowBooleanValue(conn, sql);
 	}
 
-	
 }

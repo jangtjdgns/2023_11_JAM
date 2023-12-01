@@ -36,7 +36,7 @@ public class ArticleController {
 		System.out.printf("%d번 게시물이 생성되었습니다\n", id);
 	}
 
-	public void showList() {
+	public void showList(String cmd) {
 		System.out.println("== 게시물 목록 ==");
 
 		List<Article> articles = articleService.showList();
@@ -44,6 +44,18 @@ public class ArticleController {
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시물이 없습니다");
 			return;
+		}
+
+		String[] cmdSplit = cmd.split(" ");
+
+		if (cmdSplit.length == 3) {
+			String searchKeyword = cmdSplit[2];
+			articles = articleService.getAriclesBySearchKeyword(searchKeyword);
+			
+			if(articles.size() == 0) {
+				System.out.printf("%s에 대한 검색 결과가 없습니다.\n", searchKeyword);
+				return;
+			}
 		}
 
 		System.out.println("번호	|	제목	|	작성자	|		작성일");

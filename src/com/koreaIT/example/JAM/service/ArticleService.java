@@ -18,9 +18,21 @@ public class ArticleService {
 	public int doWrite(String title, String body, int memberId) {
 		return articleDao.doWrite(title, body, memberId);
 	}
-	
+
 	public List<Article> showList() {
 		List<Map<String, Object>> articleListMap = articleDao.showList();
+
+		List<Article> articles = new ArrayList<>();
+
+		for (Map<String, Object> articleMap : articleListMap) {
+			articles.add(new Article(articleMap));
+		}
+
+		return articles;
+	}
+
+	public List<Article> getAriclesBySearchKeyword(String searchKeyword) {
+		List<Map<String, Object>> articleListMap = articleDao.getAriclesBySearchKeyword(searchKeyword);
 
 		List<Article> articles = new ArrayList<>();
 
