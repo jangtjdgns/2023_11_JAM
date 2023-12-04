@@ -35,14 +35,6 @@ public class ArticleDao {
 
 		return DBUtil.selectRows(conn, sql);
 	}
-	
-//	public List<Map<String, Object>> getAriclesBySearchKeyword(String searchKeyword) {
-//		SecSql sql = SecSql.from("SELECT * FROM article");
-//		sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
-//		sql.append("ORDER BY id DESC");
-//		
-//		return DBUtil.selectRows(conn, sql);
-//	}
 
 	public int getArticleCnt(int id) {
 		SecSql sql = SecSql.from("SELECT count(*) FROM article");
