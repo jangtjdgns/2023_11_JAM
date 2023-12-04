@@ -19,20 +19,8 @@ public class ArticleService {
 		return articleDao.doWrite(title, body, memberId);
 	}
 
-	public List<Article> showList() {
-		List<Map<String, Object>> articleListMap = articleDao.showList();
-
-		List<Article> articles = new ArrayList<>();
-
-		for (Map<String, Object> articleMap : articleListMap) {
-			articles.add(new Article(articleMap));
-		}
-
-		return articles;
-	}
-
-	public List<Article> getAriclesBySearchKeyword(String searchKeyword) {
-		List<Map<String, Object>> articleListMap = articleDao.getAriclesBySearchKeyword(searchKeyword);
+	public List<Article> showList(String searchKeyword) {
+		List<Map<String, Object>> articleListMap = articleDao.showList(searchKeyword);
 
 		List<Article> articles = new ArrayList<>();
 
@@ -70,10 +58,6 @@ public class ArticleService {
 		}
 
 		return new Article(articleMap);
-	}
-
-	public String getNameByArticleId(int articleid) {
-		return articleDao.getNameByArticleId(articleid);
 	}
 
 	public boolean checkAuthority(int id, int memberId) {

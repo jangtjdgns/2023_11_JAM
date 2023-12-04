@@ -25,20 +25,24 @@ public class ArticleDao {
 		return DBUtil.insert(conn, sql);
 	}
 
-	public List<Map<String, Object>> showList() {
-		SecSql sql = SecSql.from("SELECT * FROM article");
+	public List<Map<String, Object>> showList(String searchKeyword) {
+		SecSql sql = SecSql.from("SELECT a.*, m.name AS `writerName`");
+		sql.append("FROM article AS a");
+		sql.append("INNER JOIN `member` AS m");
+		sql.append("ON a.memberId = m.id");
+		sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
 		sql.append("ORDER BY id DESC");
 
 		return DBUtil.selectRows(conn, sql);
 	}
 	
-	public List<Map<String, Object>> getAriclesBySearchKeyword(String searchKeyword) {
-		SecSql sql = SecSql.from("SELECT * FROM article");
-		sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
-		sql.append("ORDER BY id DESC");
-		
-		return DBUtil.selectRows(conn, sql);
-	}
+//	public List<Map<String, Object>> getAriclesBySearchKeyword(String searchKeyword) {
+//		SecSql sql = SecSql.from("SELECT * FROM article");
+//		sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
+//		sql.append("ORDER BY id DESC");
+//		
+//		return DBUtil.selectRows(conn, sql);
+//	}
 
 	public int getArticleCnt(int id) {
 		SecSql sql = SecSql.from("SELECT count(*) FROM article");
@@ -57,8 +61,12 @@ public class ArticleDao {
 	}
 
 	public Map<String, Object> getArticleMap(int id) {
-		SecSql sql = SecSql.from("SELECT * FROM article");
-		sql.append("WHERE id = ?", id);
+		SecSql sql = SecSql.from("SELECT a.*, m.name AS `writerName`");
+		sql.append("FROM article AS a");
+		sql.append("INNER JOIN `member` AS m");
+		sql.append("ON a.memberId = m.id");
+		sql.append("WHERE a.id = ?", id);
+		
 		return DBUtil.selectRow(conn, sql);
 	}
 
@@ -66,15 +74,6 @@ public class ArticleDao {
 		SecSql sql = SecSql.from("DELETE FROM article");
 		sql.append("WHERE id = ?", id);
 		DBUtil.delete(conn, sql);
-	}
-
-	public String getNameByArticleId(int articleId) {
-		SecSql sql = SecSql.from("SELECT m.name AS `writerName` FROM `member` AS m");
-		sql.append("INNER JOIN article AS a");
-		sql.append("ON m.id = a.memberId");
-		sql.append("WHERE a.id = ?", articleId);
-
-		return DBUtil.selectRowStringValue(conn, sql);
 	}
 
 	public boolean checkAuthority(int id, int memberId) {

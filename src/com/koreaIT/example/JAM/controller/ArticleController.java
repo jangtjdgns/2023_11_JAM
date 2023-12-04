@@ -39,7 +39,7 @@ public class ArticleController {
 	public void showList(String cmd) {
 		System.out.println("== 게시물 목록 ==");
 
-		List<Article> articles = articleService.showList();
+		List<Article> articles = articleService.showList("");
 
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시물이 없습니다");
@@ -50,9 +50,9 @@ public class ArticleController {
 
 		if (cmdSplit.length == 3) {
 			String searchKeyword = cmdSplit[2];
-			articles = articleService.getAriclesBySearchKeyword(searchKeyword);
-			
-			if(articles.size() == 0) {
+			articles = articleService.showList(searchKeyword);
+
+			if (articles.size() == 0) {
 				System.out.printf("%s에 대한 검색 결과가 없습니다.\n", searchKeyword);
 				return;
 			}
@@ -60,8 +60,7 @@ public class ArticleController {
 
 		System.out.println("번호	|	제목	|	작성자	|		작성일");
 		for (Article article : articles) {
-			String name = articleService.getNameByArticleId(article.id);
-			System.out.printf("%d	|	%s	|	%s	|	%s\n", article.id, article.title, name,
+			System.out.printf("%d	|	%s	|	%s	|	%s\n", article.id, article.title, article.writerName,
 					Util.datetimeFormat(article.regDate));
 		}
 	}
@@ -113,7 +112,7 @@ public class ArticleController {
 		System.out.println("번  호: " + article.id);
 		System.out.println("작성일: " + Util.datetimeFormat(article.regDate));
 		System.out.println("수정일: " + Util.datetimeFormat(article.updateDate));
-		System.out.println("작성자: " + articleService.getNameByArticleId(article.id));
+		System.out.println("작성자: " + article.writerName);
 		System.out.println("제  목: " + article.title);
 		System.out.println("내  용: " + article.body);
 	}
