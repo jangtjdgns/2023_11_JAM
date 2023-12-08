@@ -39,23 +39,14 @@ public class ArticleController {
 	public void showList(String cmd) {
 		System.out.println("== 게시물 목록 ==");
 
-		List<Article> articles = articleService.showList("");
+		// "article list"의 길이만큼 자른 나머지 저장
+		String searchKeyword = cmd.substring("article list".length()).trim();
+		
+		List<Article> articles = articleService.showList(searchKeyword);
 
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시물이 없습니다");
 			return;
-		}
-
-		String[] cmdSplit = cmd.split(" ");
-
-		if (cmdSplit.length == 3) {
-			String searchKeyword = cmdSplit[2];
-			articles = articleService.showList(searchKeyword);
-
-			if (articles.size() == 0) {
-				System.out.printf("%s에 대한 검색 결과가 없습니다.\n", searchKeyword);
-				return;
-			}
 		}
 
 		System.out.println("번호	|	제목	|	작성자	|		작성일");

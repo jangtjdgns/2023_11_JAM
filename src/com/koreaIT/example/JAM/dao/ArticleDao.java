@@ -30,7 +30,10 @@ public class ArticleDao {
 		sql.append("FROM article AS a");
 		sql.append("INNER JOIN `member` AS m");
 		sql.append("ON a.memberId = m.id");
-		sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
+		// 검색어가 있을때만 조건 진행
+		if(searchKeyword.length() != 0) {
+			sql.append("WHERE title LIKE CONCAT('%', ?, '%')", searchKeyword);
+		}
 		sql.append("ORDER BY id DESC");
 
 		return DBUtil.selectRows(conn, sql);
